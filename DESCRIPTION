@@ -1,4 +1,4 @@
-Package: KiWisConnect
+Package: kiWisConnect
 Type: Package
 Title: Tools for Accessing and Exporting KIWIS Time Series Data for AquaZIS or Other Uses
 Version: 0.1.0
