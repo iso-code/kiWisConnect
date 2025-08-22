@@ -1,0 +1,28 @@
+Package: KiWisConnect
+Type: Package
+Title: Tools for Accessing and Exporting KIWIS Time Series Data for AquaZIS or Other Uses
+Version: 0.1.0
+Authors@R: 
+    person(given = "Marcel", 
+           family = "Gaj", 
+           email = "marcel.gaj@lanuv.nrw.de", 
+           role = c("aut", "cre"))
+Description: 
+    Provides functions to query KIWIS hydrological time series data and export them in ZRXP format
+    compatible with AquaZIS. Includes tools to retrieve time series metadata, download values with
+    automatic batching for large datasets, and prepare data for AquaZIS import.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.2.3
+Imports: 
+    jsonlite, 
+    curl, 
+    dplyr, 
+    stringr
+Suggests:
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
+Config/testthat/edition: 3
