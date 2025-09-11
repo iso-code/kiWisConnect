@@ -396,9 +396,13 @@ if(!is.null(include_ts_name) || length(include_ts_name) != 0) {
 #' }
 #'
 #' @export
-get_kiwis_ts <- function(hub, data_id, dateRange, return_fields=NULL, md_returnfields=NULL, truncation_fac=50,datasource=1, logPath = NULL)
+get_kiwis_ts <- function(hub, data_id, dateRange, format=NULL, return_fields=NULL, md_returnfields=NULL, truncation_fac=50,datasource=1, logPath = NULL)
 {
-   
+    if(is.null(format)) 
+    {
+      format="zrxp"
+    }
+
     if (length(data_id) >= truncation_fac) {
       trunc <- unique(c(seq(1, length(data_id), truncation_fac), length(data_id)))
   
@@ -438,7 +442,7 @@ get_kiwis_ts <- function(hub, data_id, dateRange, return_fields=NULL, md_returnf
     datasource = as.character(datasource),
     type = "queryServices",
     request = "getTimeseriesValues",
-    format = "zrxp",
+    format = format,
     ts_id = as.character(ids[i-1]),
     from = as.character(dateRange[1]),
     to = as.character(dateRange[2]),
