@@ -1,3 +1,11 @@
+#' @importFrom magrittr %>%
+
+# Für R CMD check: sichtbare Bindungen für NSE-Variablen und Pipes
+utils::globalVariables(c(
+  "parametertype_name", "station_name", "river_name", "catchment_name", "ts_name", "."
+))
+
+
 #' Safe URL Fetch with Curl
 #'
 #' This function attempts to fetch a URL with SSL certificate verification.
@@ -27,7 +35,7 @@
 #' @export
 
 safe_curl <- function(full_url, logPath = NULL) {
-  # 1. Versuch mit Zertifikatsprüfung
+
   h <- new_handle()
   handle_setopt(h, ssl_verifypeer = 1, ssl_verifyhost = 2)
   
@@ -45,7 +53,7 @@ safe_curl <- function(full_url, logPath = NULL) {
           append = TRUE
         )
       }
-      # 2. Versuch ohne Zertifikatsprüfung
+    
       h2 <- new_handle()
       handle_setopt(h2, ssl_verifypeer = 0, ssl_verifyhost = 0)
       curl(full_url, handle = h2)
@@ -250,24 +258,20 @@ get_kiwis_meta <- function(hub, dataType = NULL, return_fields = NULL, exclude_p
 
   colnames(data_vals) <- as.character(col_names)
 
-
-  # Filter nach dataType, falls angegeben
   if (!is.null(dataType)) {
     data_vals <- data_vals  %>%
       filter(parametertype_name %in% dataType)
   }
 
-  # Ausschlussfilter über station_name, falls angegeben
   if (!is.null(exclude_patterns) && length(exclude_patterns) > 0) {
     pattern_regex <- paste0(exclude_patterns, collapse = "|")
     data_vals <- data_vals[!str_detect(data_vals$station_name, regex(pattern_regex, ignore_case = TRUE)), ]
   }
 
-  # heading-Spalte mit HTML-Format
     data_vals <- data_vals %>%
     mutate(heading = paste(
       paste0("Pegel: ", station_name),
-      paste0("Gewässer: ", river_name),
+      paste0("Gew: ", river_name),
       paste0("EZG: ", catchment_name),
       sep = "<br>"
     ))
@@ -378,6 +382,7 @@ if(!is.null(include_ts_name) || length(include_ts_name) != 0) {
 #' @param hub Character. URL of the KIWIS hub to query.
 #' @param data_id Character or numeric vector. IDs of the time series to retrieve.
 #' @param dateRange Date vector of length 2. Start and end dates for the time series data.
+#' @param format Character. Format of the returned data. Options are "zrxp" (default), "tabjson", or "dajson".
 #' @param return_fields Character vector. Fields to return for each data point. Defaults to c("Timestamp", "Value").
 #' @param md_returnfields Character vector. Metadata fields to return. Defaults to c("station_no", "ts_clientvalue6", "ts_clientvalue7").
 #' @param truncation_fac Numeric. Maximum number of IDs per request block. Default is 50.
@@ -412,7 +417,7 @@ get_kiwis_ts <- function(hub, data_id, dateRange, format=NULL, return_fields=NUL
     }, character(1))
   
   } else {
-  # kein Trunkieren nötig → alles in einem Block
+  # no truncation needed
   ids <- paste0(unique(data_id), collapse = ",")
   trunc <- c(1, length(data_id))
   }
@@ -427,6 +432,7 @@ get_kiwis_ts <- function(hub, data_id, dateRange, format=NULL, return_fields=NUL
 
     if (is.null(md_returnfields) || length(md_returnfields) == 0) {
     md_returnfields <- c(
+      "ts_id",
       "station_no",
       "ts_clientvalue6",
       "ts_clientvalue7"
@@ -472,7 +478,7 @@ get_kiwis_ts <- function(hub, data_id, dateRange, format=NULL, return_fields=NUL
 #' Write Dataset in ZRXP Format for AquaZIS
 #'
 #' This function converts a dataset to be compatible with the ZRXP format required by AquaZIS.
-#' It renames specific columns (`ts_clientvalue6` → `EXTNUM1`, `ts_clientvalue7` → `EXTNUM2`), 
+#' It renames specific columns (`ts_clientvalue6`, `EXTNUM1`, `ts_clientvalue7`,`EXTNUM2`), 
 #' ensures UTF-8 encoding, removes any existing ZRXP headers, and writes the result to a file.
 #'
 #' @param path Character. File path where the converted dataset will be saved.

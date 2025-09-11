@@ -21,7 +21,8 @@ Imports:
     jsonlite,
     stringr,
     utils,
-    readr
+    readr,
+    magrittr
 Suggests:
     testthat (>= 3.0.0),
     knitr,

@@ -16,7 +16,7 @@ None. The function writes the processed dataset to the specified file path.
 }
 \description{
 This function converts a dataset to be compatible with the ZRXP format required by AquaZIS.
-It renames specific columns (`ts_clientvalue6` → `EXTNUM1`, `ts_clientvalue7` → `EXTNUM2`), 
+It renames specific columns (`ts_clientvalue6`, `EXTNUM1`, `ts_clientvalue7`,`EXTNUM2`), 
 ensures UTF-8 encoding, removes any existing ZRXP headers, and writes the result to a file.
 }
 \examples{

@@ -8,6 +8,7 @@ get_kiwis_ts(
   hub,
   data_id,
   dateRange,
+  format = NULL,
   return_fields = NULL,
   md_returnfields = NULL,
   truncation_fac = 50,
@@ -21,6 +22,8 @@ get_kiwis_ts(
 \item{data_id}{Character or numeric vector. IDs of the time series to retrieve.}
 
 \item{dateRange}{Date vector of length 2. Start and end dates for the time series data.}
+
+\item{format}{Character. Format of the returned data. Options are "zrxp" (default), "tabjson", or "dajson".}
 
 \item{return_fields}{Character vector. Fields to return for each data point. Defaults to c("Timestamp", "Value").}
 
