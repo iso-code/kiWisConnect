@@ -405,7 +405,7 @@ get_kiwis_ts <- function(hub, data_id, dateRange, format=NULL, return_fields=NUL
 {
     if(is.null(format)) 
     {
-      format="zrxp"
+      format="dajson"
     }
 
     if (length(data_id) >= truncation_fac) {
